@@ -1,6 +1,9 @@
 # email-file-size
 The weight of the HTML is important because Gmail clips messages that weigh over 102kb
 
+https://github.com/atherdon/markdown-to-email/blob/main/package/GENERATOR/src/utils.js#L50
+
+
 
 https://www.litmus.com/blog/qa-with-mailcharts-on-email-file-size/
 
