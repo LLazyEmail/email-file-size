@@ -14,3 +14,4 @@ https://www.rossde.com/internet/ASCIIvsHTML.html
 
 https://support.zendesk.com/hc/en-us/articles/115006137808-What-does-Email-size-cannot-exceed-8192-bytes-mean-
 
+https://www.drip.com/learn/docs/guides/avoid-email-clipping-in-gmail
