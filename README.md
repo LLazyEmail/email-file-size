@@ -6,6 +6,29 @@ The weight of the HTML is important because Gmail clips messages that weigh over
 
 
 
+```bash
+├── xxx
+│   ├── xxx
+│   │   ├── **/*.xxx
+│   ├── xxx
+│   ├── images
+│   ├── xxx
+│   ├── js
+│   │   ├── **/*.js
+│   └── xxx
+├── dist (or build)
+├── 
+├── 
+├── 
+├── 
+├── README.md
+├── package.json
+├── 
+└── .gitignore
+```
+
+
+
 - https://www.litmus.com/blog/qa-with-mailcharts-on-email-file-size/
 
 
