@@ -1,0 +1,64 @@
+{
+  "name": "email-file-size",
+  "version": "0.1.0",
+  "description": "Measure email HTML size and detect Gmail clipping risk (102 KB limit)",
+  "keywords": [
+    "email",
+    "html",
+    "size",
+    "gmail",
+    "clipping",
+    "newsletter",
+    "deliverability"
+  ],
+  "author": "LLazyEmail",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LLazyEmail/email-file-size.git"
+  },
+  "bugs": {
+    "url": "https://github.com/LLazyEmail/email-file-size/issues"
+  },
+  "homepage": "https://github.com/LLazyEmail/email-file-size#readme",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    }
+  },
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md"
+  ],
+  "sideEffects": false,
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run typecheck && npm run test && npm run build",
+    "release": "npm version patch && npm publish --access public"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  }
+}

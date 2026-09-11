@@ -1,40 +1,121 @@
-# Email File Size
+# email-file-size
 
-The weight of the HTML is important because **Gmail clips messages that weigh over 102kb**. This repository provides resources and information about managing email file sizes.
+[![CI](https://github.com/LLazyemail/email-file-size/actions/workflows/ci.yml/badge.svg)](https://github.com/LLazyemail/email-file-size/actions/workflows/ci.yml)
+[![npm version](https://img.shields.io/npm/v/email-file-size.svg)](https://www.npmjs.com/package/email-file-size)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-## Why Email Size Matters
+Measure the size of email HTML and detect **Gmail clipping** risk.
 
-Email file size is critical for deliverability and user experience. Large emails are clipped or not displayed properly by email clients, particularly Gmail. Understanding and optimizing email size is essential for:
+Gmail clips messages whose HTML source exceeds **~102 KB**. This package gives you a simple, zero-dependency way to measure size and stay under the limit.
 
-- Ensuring emails display correctly in all clients
-- Preventing message clipping by Gmail and other providers
-- Improving email load times and user experience
-- Meeting email size limits set by various email providers
+## Install
 
-## Reference
+```bash
+npm install email-file-size
+# or
+pnpm add email-file-size
+# or
+yarn add email-file-size
+```
 
-- [Email file size limits overview](https://www.mailslurp.com/guides/email-size-limits/)
-- [Avoiding email clipping in Gmail](https://www.drip.com/learn/docs/guides/avoid-email-clipping-in-gmail)
-- [Mailcharts QA on email file size](https://www.litmus.com/blog/qa-with-mailcharts-on-email-file-size/)
-- [Email size cannot exceed 8192 bytes](https://support.zendesk.com/hc/en-us/articles/115006137808-What-does-Email-size-cannot-exceed-8192-bytes-mean-)
+## Usage
 
-## Related Resources
+```ts
+import {
+  analyzeEmailSize,
+  getByteSize,
+  isEmailClipped,
+  isEmailSafe,
+  GMAIL_CLIP_LIMIT,
+  SAFE_EMAIL_LIMIT,
+} from 'email-file-size';
 
-- [ASCII vs HTML - File Size Comparison](https://www.rossde.com/internet/ASCIIvsHTML.html)
-- [Implementation reference in markdown-to-email](https://github.com/atherdon/markdown-to-email/blob/main/package/GENERATOR/src/utils.js#L50)
+const html = `<!DOCTYPE html>
+<html>
+  <body>
+    <h1>Hello</h1>
+    <p>Your newsletter content…</p>
+  </body>
+</html>`;
 
-## Further Reading
+// Full analysis
+const result = analyzeEmailSize(html);
+console.log(result);
+// {
+//   bytes: 142,
+//   human: "142 B",
+//   isClipped: false,
+//   isSafe: true,
+//   percentOfLimit: 0.1
+// }
 
-### Articles by Arthur Tkachenko
+// Quick checks
+if (isEmailClipped(html)) {
+  console.warn('This email will be clipped by Gmail');
+}
 
-- [5 Reasons Why Newsletters Should Be Part of Your Business Strategy](https://hackernoon.com/5-reasons-why-newsletters-should-be-part-of-your-business-strategy)
-- [Organizing an Advanced Structure for HTML Email Template](https://hackernoon.com/organizing-an-advanced-structure-for-html-email-template)
-- [How I Started to Build React Components for Email Templates](https://hackernoon.com/how-i-started-to-build-react-components-for-email-templates)
-- [Introducing a Simple npm Module with Email Templates](https://hackernoon.com/introducing-a-simple-npm-module-with-email-templates)
-- [Glossary for Non-Technies](https://hackernoon.com/glossary-for-non-technies)
-- [Email Marketing and How to Curate an Effective Business Newsletter](https://hackernoon.com/email-marketing-and-how-to-curate-an-effective-business-newsletter)
-- [Exploring Substack for Building Your Newsletter](https://hackernoon.com/exploring-substack-for-building-your-newsletter)
-- [Building a Design System for Email Templates (React)](https://hackernoon.com/building-a-design-system-for-email-templates-react)
-- [Together4Victory: List of Email Marketing Tools](https://hackernoon.com/together4victory-list-of-email-marketing-tools)
-- [Cool Newsletters for Developers - Part 1](https://hackernoon.com/cool-newsletters-for-developers-part-1)
-- [Cool Resources for Sending Emails](https://hackernoon.com/cool-resources-for-sending-emails)
+if (!isEmailSafe(html)) {
+  console.warn('Consider reducing size for better deliverability');
+}
+
+// Raw byte size
+const bytes = getByteSize(html);
+```
+
+## API
+
+| Export | Description |
+|--------|-------------|
+| `getByteSize(content: string): number` | UTF-8 byte length of the string |
+| `formatBytes(bytes: number, decimals?: number): string` | Human-readable size (`"87.3 KB"`) |
+| `analyzeEmailSize(html, options?)` | Full result object (see above) |
+| `isEmailClipped(html, limit?)` | `true` if over Gmail limit |
+| `isEmailSafe(html, safeLimit?)` | `true` if under recommended safe size |
+| `GMAIL_CLIP_LIMIT` | `102 * 1024` (104 448 bytes) |
+| `SAFE_EMAIL_LIMIT` | `90 * 1024` (recommended buffer) |
+
+### Options for `analyzeEmailSize`
+
+```ts
+analyzeEmailSize(html, {
+  limit: 102 * 1024,      // custom clip threshold
+  safeLimit: 90 * 1024,   // custom safe threshold
+});
+```
+
+## Why this matters
+
+- Gmail shows **“[Message clipped] View entire message”** when the HTML exceeds ~102 KB.
+- Tracking pixels, unsubscribe links and footers often sit at the bottom and get hidden.
+- Keeping size under **90–95 KB** gives a comfortable safety margin.
+
+## Publishing workflow
+
+This package is set up for a clean publish cycle:
+
+```bash
+npm run typecheck   # TypeScript strict check
+npm test            # Vitest
+npm run build       # tsup → ESM + CJS + .d.ts
+npm run release     # bump patch + publish
+```
+
+Or manually:
+
+```bash
+npm version patch   # or minor / major
+npm publish --access public
+```
+
+## Development
+
+```bash
+npm install
+npm run dev         # watch mode (tsup)
+npm test            # run tests
+npm run test:watch
+```
+
+## License
+
+MIT © LLazyEmail
