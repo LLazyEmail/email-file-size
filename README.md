@@ -107,6 +107,10 @@ npm version patch   # or minor / major
 npm publish --access public
 ```
 
+## CI / GitHub Actions
+
+One workflow, `.github/workflows/ci.yml` (**CI**), runs on every push and PR to `main`. On Node 20, 22 and 24 it runs `npm ci`, `npm run typecheck`, `npm test` (Vitest) and `npm run build` (tsup). `npm ci` needs the committed `package-lock.json`; after changing dependencies run `npm install` and commit the updated lockfile. Publishing is manual (see above); no workflow publishes to npm.
+
 ## Development
 
 ```bash
